@@ -17,11 +17,12 @@ currentyear = date.today().year
 
 
 def checkweek(week, dow, month):
-    '''take given 'week' of a month of datetime.date() objects as gathered by:
+    '''take given 'week' of datetime.date() objects as gathered by:
          calendar.Calendar.monthdatescalendar(year, month)[N]
        and 'day of week' as requested, evaluate whether or not the given day of
-       the day falls within a week within the given month, and return True or
-       False based on that evaluation.'''
+       the week falls within the given month (ie: neither in the previous nor
+       in the next month), and return True or False based on that
+       evaluation.'''
     check = week[dayofweek.index(dow.lower())].month
     if check == month:
         return True
@@ -59,32 +60,21 @@ def holidayis(month, dom=False, day=False, year=currentyear,
         monthcal = cal.monthdatescalendar(year, month)
         (which, dow) = day.split()
         which = which.lower()
-        first_dow_is_in_this_month = checkweek(monthcal[0], dow, month)
-        if which == 'first':
-            if first_dow_is_in_this_month:
-                week = monthcal[0]
-            else:
-                week = monthcal[1]
-        elif which == 'second':
-            if first_dow_is_in_this_month:
-                week = monthcal[1]
-            else:
-                week = monthcal[2]
-        elif which == 'third':
-            if first_dow_is_in_this_month:
-                week = monthcal[2]
-            else:
-                week = monthcal[3]
-        elif which == 'fourth':
-            if first_dow_is_in_this_month:
-                week = monthcal[3]
-            else:
-                week = monthcal[4]
-        elif which == 'last':
-            if checkweek(monthcal[-1], dow, month):
-                week = monthcal[-1]
-            else:
-                week = monthcal[-2]
+        map_if = {'first': 0,
+                  'second': 1,
+                  'third': 2,
+                  'fourth': 3,
+                  'last': -1}
+        map_if_not = {'first': 1,
+                      'second': 2,
+                      'third': 3,
+                      'fourth': 4,
+                      'last': -2}
+        dow_is_in_this_month = checkweek(monthcal[map_if[which]], dow, month)
+        if dow_is_in_this_month:
+            week = monthcal[map_if[which]]
+        else:
+            week = monthcal[map_if_not[which]]
         theday = week[dayofweek.index(dow.lower())]
     elif dom:
         dow = calendar.weekday(year, month, dom)
