@@ -15,7 +15,7 @@ currentyear = date.today().year
 
 
 def firstcap(s):
-    return s[0].upper() + s[1:]
+    return s[0].upper() + s[1:].lower()
 
 
 def checkweek(week, dow, month):
