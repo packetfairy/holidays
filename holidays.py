@@ -11,9 +11,11 @@ if python_inuse < python_required:
 import calendar
 from datetime import date
 
-dayofweek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday',
-             'saturday', 'sunday']
 currentyear = date.today().year
+
+
+def firstcap(s):
+    return s[0].upper() + s[1:]
 
 
 def checkweek(week, dow, month):
@@ -23,7 +25,7 @@ def checkweek(week, dow, month):
        the week falls within the given month (ie: neither in the previous nor
        in the next month), and return True or False based on that
        evaluation.'''
-    check = week[dayofweek.index(dow.lower())].month
+    check = week[list(calendar.day_name).index(firstcap(dow))].month
     if check == month:
         return True
     else:
@@ -56,6 +58,10 @@ def holidayis(month, dom=False, day=False, year=currentyear,
           - after:   forces to the Monday after
     '''
     cal = calendar.Calendar(0)
+    try:
+        month = int(month)
+    except:
+        month = list(calendar.month_abbr).index(firstcap(month))
     if day:
         monthcal = cal.monthdatescalendar(year, month)
         (which, dow) = day.split()
@@ -75,7 +81,7 @@ def holidayis(month, dom=False, day=False, year=currentyear,
             week = monthcal[map_if[which]]
         else:
             week = monthcal[map_if_not[which]]
-        theday = week[dayofweek.index(dow.lower())]
+        theday = week[list(calendar.day_name).index(firstcap(dow))]
     elif dom:
         dow = calendar.weekday(year, month, dom)
         if dow > 4:
@@ -125,8 +131,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--year', type=int, default=date.today().year,
                         help='specify year')
-    parser.add_argument('--month', type=int, default=False,
-                        help='specify integer month (eg: April = 4)')
+    parser.add_argument('--month', default=False,
+                        help='specify month (eg: April or 4)')
     parser.add_argument('--dom', type=int, default=False,
                         help='specify integer day of month (eg: 4)')
     parser.add_argument('--day', type=str, default=False,
