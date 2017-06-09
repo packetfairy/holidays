@@ -93,9 +93,15 @@ def holidayis(month, dom=False, day=False, year=currentyear,
                 else:
                     return 'wrongdayofweekfound'
             elif beforeorafter == 'before':
-                theday = date(year, month, dom - 1)
+                if dow == 5:
+                    theday = date(year, month, dom - 1)
+                elif dow == 6:
+                    theday = date(year, month, dom - 2)
             elif beforeorafter == 'after':
-                theday = date(year, month, dom + 1)
+                if dow == 5:
+                    theday = date(year, month, dom + 2)
+                elif dow == 6:
+                    theday = date(year, month, dom + 1)
         else:
             theday = date(year, month, dom)
     else:

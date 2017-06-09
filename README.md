@@ -13,3 +13,7 @@ but it does what I need it to do.
 It comes with a predefined set of US observed holidays (those typically
 observed by companies in the bay area, in my experience), and can be used to
 define any set of holidays using the provided criteria.
+
+Update 2017-06-08 - I realized today that this DOES NOT do everything I think
+and want it to do. For example, look at Thanksgiving in 2024. Anyway, you
+probably shouldn't use it right now (because so many people are using it!).
